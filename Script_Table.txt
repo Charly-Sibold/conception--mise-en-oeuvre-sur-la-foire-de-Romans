@@ -1,0 +1,72 @@
+CREATE TABLE ESPACE
+( Num_esp int not null,
+  Nom_esp varchar(50),
+  constraint pk_espace primary key(Num_esp)
+);
+
+CREATE TABLE CLIENT
+( Code_cli int not null,
+  Nom_ent_cli varchar(50),
+  Adresse_cli varchar(50),
+  Num_tel_cli char(10),
+  constraint pk_client primary key(code_cli)
+);
+
+CREATE TABLE BOX
+( Num_box int not null,
+  Sup_box decimal(5,2),
+  Puiss_elec_box varchar(4),
+  Point_eau_box char(3),
+  Num_esp int,
+  code_cli int,
+  constraint pk_box primary key(Num_box),
+  constraint fk_espace_box foreign key (Num_esp) references ESPACE(Num_esp),
+  constraint fk_client_box foreign key (code_cli) references CLIENT(code_cli)
+);
+
+CREATE TABLE HOTESSE
+( Num_Badge_hot int not null,
+  Nom_hot varchar(30),
+  Prenom_hot varchar(30),
+  Num_esp int,
+  constraint pk_hotesse primary key(Num_badge_hot),
+  constraint fk_espace_hotesse foreign key(Num_esp) references ESPACE(Num_esp)
+);
+
+CREATE TABLE LANGUE
+( Id_langue int not null,
+  Libelle_langue varchar(20),
+  constraint pk_langue primary key(Id_langue)
+);
+
+CREATE TABLE ANIMATION
+( Id_anim int not null,
+  Nom_anim varchar(50),
+  Duree_anim varchar(10),
+  constraint pk_animation primary key(Id_anim)
+);
+
+CREATE TABLE REPRESENTATION
+( Code_repres int not null,
+  date_repres date,
+  Heure_repres char(5),
+  id_anim int,
+  constraint pk_representation primary key(code_repres),
+  constraint fk_animation_representation foreign key(Id_anim) references ANIMATION(id_anim)
+);
+
+CREATE TABLE ENCADRER
+( Num_Badge_Hot int not null,
+  Code_repres int not null,
+  constraint pk_encadre primary key(Num_badge_hot,code_repres),
+  constraint fk_hotesse_encadre foreign key(num_badge_hot) references HOTESSE(num_badge_hot),
+  constraint fk_representation_encadre foreign key(code_repres) references REPRESENTATION(code_repres)
+);
+
+CREATE TABLE PARLER
+( Id_Langue int not null,
+  Num_badge_hot int not null,
+  constraint pk_parler primary key(Id_langue,num_badge_hot),
+  constraint fk_langue_parler foreign key(Id_langue) references LANGUE(Id_langue),
+  constraint fk_hotesse_parler foreign key(num_badge_hot) references HOTESSE(num_badge_hot)
+);
